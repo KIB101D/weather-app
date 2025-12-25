@@ -9,6 +9,7 @@ Mobile-first weather application built with pure JavaScript and OpenWeather API.
 Planned: 
 - Celsius / Fahrenheit toggle (coming soon)
 - Error and loading states (planned)
+- Add other languages UA/EN/PL (in progress)
 - Mobile-first responsive layout (in progress)
 
 ## Tech Stack
