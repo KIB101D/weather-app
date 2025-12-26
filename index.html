@@ -4,17 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>weather-app</title>
 </head>
 
 <body>
+    <div class="lang-switcher">
+        <button class="lang-current" aria-haspopup="true" aria-expanded="false">
+            <span class="lang-current-text">UA</span>
+            <svg class="lang-arrow" width="12" height="8" viewBox="0 0 12 8">
+                <path fill="currentColor" d="M0 0l6 8 6-8z" />
+            </svg>
+        </button>
+        <ul class="lang-dropdown" hidden>
+            <li><button class="lang-option" data-lang="ua">Українська (UA)</button></li>
+            <li><button class="lang-option" data-lang="en">English (EN)</button></li>
+            <li><button class="lang-option" data-lang="pl">Polski (PL)</button></li>
+        </ul>
+    </div>
+    <div class="units-switcher">
+        <span class="units-label"></span>
+        <button class="units-btn active" data-unit="c">°C</button>
+        <button class="units-btn" data-unit="f">°F</button>
+    </div>
     <form>
-        <input type="text" id="city-input" placeholder="Введіть місто">
+        <input type="text" id="city-input" placeholder="Enter city">
     </form>
     <button id="search">Check weather</button>
-    <div id="weather-result"></div>
+    <div class="weather-result">
+        <div class="weather-card">
+            <h2 class="weather-card__city"><Data></Data></h2>
+            <img alt="weather" class="weather-card__icon">
+            <p class="weather-card__temp"></p>
+            <p class="weather-card__description">
+            </p>
+            <p class="weather-card__details">
+                Feels like: 0°C •
+                Humidity: 0% •
+                Wind: 0м/с
+            </p>
+        </div>
+    </div>
 </body>
 
-<script src="main.js"></script>
+<script type="module" src="main.js"></script>
 
 </html>
