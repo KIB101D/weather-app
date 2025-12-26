@@ -1,80 +1,191 @@
-const getWeather = async (city) => {
-    if (!city) {
-        displayError("Введіть назву міста!");
-        return;
-    }
+// src/js/main.js
 
-    try {
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=0a178768b73fa365b9ac852db3d15da2&units=metric&lang=ua`
-        );
+import { loadWeather } from './services/weatherService.js';
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log("Ok", data);
-            displayWeather(data);
-        } else {
-            if (response.status === 404) {
-                displayError("Місто не знайдено 😔");
-            } else {
-                displayError("Помилка сервера, спробуйте пізніше");
-            }
-        }
-    } catch (error) {
-        displayError("Немає інтернету або проблема з'єднання");
-    }
+import { getElement } from './utils/dom.js';
+
+import {
+
+    setLanguage,
+
+    updatePageTexts,
+
+    getCurrentLang,
+
+    getLastWeatherData
+
+} from './services/translationService.js';
+
+import { renderWeather as renderWeatherCard } from './components/weatherCard.js';
+
+import { setUnit, getCurrentUnit } from './services/unitService.js';
+
+const searchBtn = getElement('#search');
+
+const cityInput = getElement('#city-input');
+
+const langSwitcher = document.querySelector('.lang-switcher');
+
+const langCurrentBtn = document.querySelector('.lang-current');
+
+const langCurrentText = document.querySelector('.lang-current-text');
+
+const langDropdown = document.querySelector('.lang-dropdown');
+
+const langOptions = document.querySelectorAll('.lang-option');
+
+const unitsButtons = document.querySelectorAll('.units-btn');
+
+updatePageTexts();
+
+const updateCurrentLangText = () => {
+
+    const current = getCurrentLang();
+
+    const labels = {
+
+        ua: 'UA',
+
+        en: 'EN',
+
+        pl: 'PL'
+
+    };
+
+    langCurrentText.textContent = labels[current] || 'UA';
+
+    // hide dropdown
+
+    langSwitcher.dataset.open = 'false';
+
+    langCurrentBtn.setAttribute('aria-expanded', 'false');
+
+    langDropdown.hidden = true;
+
 };
 
-function displayWeather(data) {
-    const result = document.getElementById("weather-result");
+// === Toggle open/close dropdown ===
 
-    result.innerHTML = `
-        <div style="
-            text-align: center;
-            margin-top: 30px;
-            font-family: Arial, sans-serif;
-            background: #f0f8ff;
-            padding: 20px;
-            border-radius: 15px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        ">
-            <h2 style="margin: 0; font-size: 32px;">${data.name}, ${data.sys.country}</h2>
-            <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Погода" style="width: 120px; margin: 15px 0;">
-            <p style="font-size: 48px; margin: 10px 0; font-weight: bold;">${Math.round(data.main.temp)}°C</p>
-            <p style="font-size: 24px; margin: 10px 0; color: #555;">
-                ${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}
-            </p>
-            <p style="margin: 10px 0; color: #666;">
-                Відчувається як: ${Math.round(data.main.feels_like)}°C • 
-                Вологість: ${data.main.humidity}% • 
-                Вітер: ${data.wind.speed} м/с
-            </p>
-        </div>
-    `;
-}
+langCurrentBtn.addEventListener('click', (e) => {
 
-function displayError(message) {
-    const result = document.getElementById("weather-result");
-    result.innerHTML = `
-        <p style="
-            text-align: center;
-            margin-top: 30px;
-            color: red;
-            font-size: 20px;
-            font-family: Arial, sans-serif;
-        ">
-            ${message}
-        </p>
-    `;
-}
+    e.stopPropagation();
 
-const searchBtn = document.getElementById("search");
-const cityInput = document.getElementById("city-input");
+    const isOpen = langSwitcher.dataset.open === 'true';
 
-searchBtn.addEventListener("click", () => {
-    const actual_city = cityInput.value.trim();
-    getWeather(actual_city);
+    if (isOpen) {
+
+        updateCurrentLangText();
+
+    } else {
+
+        langSwitcher.dataset.open = 'true';
+
+        langCurrentBtn.setAttribute('aria-expanded', 'true');
+
+        langDropdown.hidden = false;
+
+    }
+
+});
+
+// === Change language with dropdown ===
+
+langOptions.forEach(option => {
+
+    option.addEventListener('click', (e) => {
+
+        e.stopPropagation();
+
+        const newLang = option.dataset.lang;
+
+        if (newLang === getCurrentLang()) {
+
+            updateCurrentLangText();
+
+            return;
+
+        }
+
+        setLanguage(newLang);
+
+        updatePageTexts();
+
+        updateCurrentLangText();
+
+        const lastCity = localStorage.getItem('lastSearchedCity');
+
+        if (lastCity) {
+
+            loadWeather(lastCity);
+
+        }
+
+    });
+
+});
+
+document.addEventListener('click', () => {
+
+    if (langSwitcher.dataset.open === 'true') {
+
+        updateCurrentLangText();
+
+    }
+
+});
+
+updateCurrentLangText();
+
+// === Unit switch °C / °F ===
+
+unitsButtons.forEach(btn => {
+
+    btn.addEventListener('click', () => {
+
+        const unit = btn.dataset.unit;
+
+        if (unit === getCurrentUnit()) return;
+
+        setUnit(unit);
+
+        unitsButtons.forEach(b => b.classList.remove('active'));
+
+        btn.classList.add('active');
+
+        const lastData = getLastWeatherData();
+
+        if (lastData) {
+
+            renderWeatherCard(lastData);
+
+        }
+
+    });
+
+    if (btn.dataset.unit === getCurrentUnit()) {
+
+        btn.classList.add('active');
+
+    }
+
+});
+
+// === search btn ===
+
+searchBtn.addEventListener('click', () => {
+
+    const city = cityInput.value.trim();
+
+    loadWeather(city);
+
+});
+
+cityInput.addEventListener('keydown', (e) => {
+
+    if (e.key === 'Enter') {
+
+        loadWeather(cityInput.value.trim());
+
+    }
+
 });
