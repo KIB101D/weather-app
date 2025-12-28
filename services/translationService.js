@@ -1,5 +1,4 @@
 // src/js/services/translationService.js
-
 const translations = {
     ua: {
         placeholder: "Введіть місто...",
@@ -11,7 +10,8 @@ const translations = {
         errorCityNotFound: "Місто не знайдено :(",
         errorServer: "Помилка сервера, спробуйте пізніше",
         errorNetwork: "Немає інтернету",
-        loading: "Завантаження..."
+        loading: "Завантаження...",
+        clearButton: "Вихід",
     },
     en: {
         placeholder: "Enter city...",
@@ -23,7 +23,8 @@ const translations = {
         errorCityNotFound: "City not found :(",
         errorServer: "Server error, try again later",
         errorNetwork: "No internet connection",
-        loading: "Loading..."
+        loading: "Loading...",
+        clearButton: "Clear",
     },
     pl: {
         placeholder: "Wprowadż miasto",
@@ -35,7 +36,8 @@ const translations = {
         errorCityNotFound: "Miasto nieznalezione :(",
         errorServer: "Bład serweru, sprobój pożniej",
         errorNetwork: "Problem z dołaczeniem do internetu",
-        loading: "Ładowanie..."
+        loading: "Ładowanie...",
+        clearButton: "Wyjdź",
     }
 };
 
@@ -53,10 +55,14 @@ export const setLanguage = (lang) => {
     localStorage.setItem('weatherAppLang', lang);
 };
 
-// Функція для повного оновлення текстів на сторінці (викликається після зміни мови)
 export const updatePageTexts = () => {
     document.getElementById('city-input').placeholder = getTranslation('placeholder');
     document.getElementById('search').textContent = getTranslation('button');
+
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn) {
+        clearBtn.textContent = getTranslation('clearButton');
+    }
 };
 
 let lastWeatherData = null;
