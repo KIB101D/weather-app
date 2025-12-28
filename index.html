@@ -9,28 +9,34 @@
 </head>
 
 <body>
-    <div class="lang-switcher">
-        <button class="lang-current" aria-haspopup="true" aria-expanded="false">
-            <span class="lang-current-text">UA</span>
-            <svg class="lang-arrow" width="12" height="8" viewBox="0 0 12 8">
-                <path fill="currentColor" d="M0 0l6 8 6-8z" />
-            </svg>
-        </button>
-        <ul class="lang-dropdown" hidden>
-            <li><button class="lang-option" data-lang="ua">Українська (UA)</button></li>
-            <li><button class="lang-option" data-lang="en">English (EN)</button></li>
-            <li><button class="lang-option" data-lang="pl">Polski (PL)</button></li>
-        </ul>
+    <div class="header-controls">
+        <div class="lang-switcher">
+            <button class="lang-current" aria-haspopup="true" aria-expanded="false">
+                <span class="lang-current-text">UA</span>
+                <svg class="lang-arrow" width="12" height="8" viewBox="0 0 12 8">
+                    <path fill="currentColor" d="M0 0l6 8 6-8z" />
+                </svg>
+            </button>
+            <ul class="lang-dropdown" hidden>
+                <li><button class="lang-option" data-lang="ua">Українська (UA)</button></li>
+                <li><button class="lang-option" data-lang="en">English (EN)</button></li>
+                <li><button class="lang-option" data-lang="pl">Polski (PL)</button></li>
+            </ul>
+        </div>
+        <div class="units-switcher">
+            <span class="units-label"></span>
+            <button class="units-btn active" data-unit="c">°C</button>
+            <button class="units-btn" data-unit="f">°F</button>
+        </div>
     </div>
-    <div class="units-switcher">
-        <span class="units-label"></span>
-        <button class="units-btn active" data-unit="c">°C</button>
-        <button class="units-btn" data-unit="f">°F</button>
+    <div class="search-screen">
+        <div class="search-container">
+            <form>
+                <input type="text" id="city-input" placeholder="Enter city">
+            </form>
+            <button id="search">Check weather</button>
+        </div>
     </div>
-    <form>
-        <input type="text" id="city-input" placeholder="Enter city">
-    </form>
-    <button id="search">Check weather</button>
     <div class="weather-result">
         <div class="weather-card">
             <h2 class="weather-card__city"><Data></Data></h2>
@@ -41,8 +47,11 @@
             <p class="weather-card__details">
                 Feels like: 0°C •
                 Humidity: 0% •
-                Wind: 0м/с
+                Wind: 0 м/с
             </p>
+        </div>
+        <div class="weather-card__actions">
+            <button id="clear-btn" class="clear-btn">Close</button>
         </div>
     </div>
 </body>
