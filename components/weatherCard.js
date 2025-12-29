@@ -55,7 +55,8 @@ export const renderWeather = (data) => {
     const t = {
         feelsLike: getTranslation('feelsLike'),
         humidity: getTranslation('humidity'),
-        wind: getTranslation('wind')
+        wind: getTranslation('wind'),
+        windUnit: getTranslation('windUnit')
     };
 
     const temp = convertTemp ? convertTemp(data.main.temp) : Math.round(data.main.temp);
@@ -75,9 +76,9 @@ export const renderWeather = (data) => {
                 ${data.weather[0].description.charAt(0).toUpperCase() + data.weather[0].description.slice(1)}
             </p>
             <p class="weather-card__details">
-                ${t.feelsLike}: ${feelsLike}${symbol} • 
-                ${t.humidity}: ${data.main.humidity}% • 
-                ${t.wind}: ${data.wind.speed} м/с
+                ${t.feelsLike}: ${feelsLike}${symbol} <br>
+                ${t.humidity}: ${data.main.humidity}% <br> 
+                ${t.wind}: ${data.wind.speed} ${t.windUnit}
             </p>
 
             <div class="weather-card__actions">
