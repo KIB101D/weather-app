@@ -10,6 +10,11 @@
 
 <body>
     <div class="header-controls">
+        <div class="units-switcher">
+            <span class="units-label"></span>
+            <button class="units-btn" data-unit="c">°C</button>
+            <button class="units-btn" data-unit="f">°F</button>
+        </div>
         <div class="lang-switcher">
             <button class="lang-current" aria-haspopup="true" aria-expanded="false">
                 <span class="lang-current-text">UA</span>
@@ -23,18 +28,24 @@
                 <li><button class="lang-option" data-lang="pl">Polski (PL)</button></li>
             </ul>
         </div>
-        <div class="units-switcher">
-            <span class="units-label"></span>
-            <button class="units-btn active" data-unit="c">°C</button>
-            <button class="units-btn" data-unit="f">°F</button>
-        </div>
     </div>
+
     <div class="search-screen">
         <div class="search-container">
-            <form>
-                <input type="text" id="city-input" placeholder="Enter city">
-            </form>
-            <button id="search">Check weather</button>
+            <img src="/logo/WeatherApp.png" class="app-logo">
+            <div class="search-block">
+                <button id="geo-btn" class="geo-btn" title="Geo">
+                    📍
+                </button>
+                <div class="autocomplete-wrapper">
+                    <form>
+                        <input type="text" id="city-input" placeholder="Enter city" autocomplete="off">
+                    </form>
+                    <!-- Autocomplete list -->
+                    <ul class="autocomplete-list hidden" id="autocomplete-list"></ul>
+                </div>
+                <button id="search">Check weather</button>
+            </div>
         </div>
     </div>
     <div class="weather-result">
