@@ -17,20 +17,29 @@ import { renderWeather as renderWeatherCard } from './components/weatherCard.js'
 
 import { setUnit, getCurrentUnit } from './services/unitService.js';
 
-import { DisplayService } from './services/DisplayService.js'; 
+import { DisplayService } from './services/DisplayService.js';
+
+import { initAutocomplete } from './services/autocompleteService.js';
+
+import { initCloudParticles } from './utils/cloudParticles.js';
+
+import { handleGeolocation } from './services/geoService.js';
 
 const searchBtn = getElement('#search');
 const cityInput = getElement('#city-input');
+const searchForm = document.querySelector('form'); // Додано: посилання на форму
 const langSwitcher = document.querySelector('.lang-switcher');
 const langCurrentBtn = document.querySelector('.lang-current');
 const langCurrentText = document.querySelector('.lang-current-text');
 const langDropdown = document.querySelector('.lang-dropdown');
 const langOptions = document.querySelectorAll('.lang-option');
 const unitsButtons = document.querySelectorAll('.units-btn');
+const geoBtn = document.getElementById('geo-btn');
 
 // Re-safe
 DisplayService.hide('.weather-card');
 DisplayService.hide('.weather-card__actions');
+DisplayService.show('.search-screen'); // Якщо використовуєш .search-screen — показуємо на старті
 
 updatePageTexts();
 
@@ -47,6 +56,7 @@ const updateCurrentLangText = () => {
     langCurrentBtn.setAttribute('aria-expanded', 'false');
     langDropdown.hidden = true;
 };
+
 
 // === Toggle open/close dropdown ===
 langCurrentBtn.addEventListener('click', (e) => {
@@ -115,8 +125,10 @@ searchBtn.addEventListener('click', () => {
     }
 });
 
+// === Enter key support (fixed) ===
 cityInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
+        e.preventDefault();
         const city = cityInput.value.trim();
         if (city) {
             loadWeather(city);
@@ -124,7 +136,16 @@ cityInput.addEventListener('keydown', (e) => {
     }
 });
 
-// === Button "Exit"  ===
+// Absolute Defence for default submit form
+searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const city = cityInput.value.trim();
+    if (city) {
+        loadWeather(city);
+    }
+});
+
+// === Button "Exit" ===
 document.addEventListener('click', (e) => {
     if (e.target && e.target.id === 'clear-btn') {
         cityInput.value = '';
@@ -140,8 +161,55 @@ document.addEventListener('click', (e) => {
     }
 });
 
+initAutocomplete();
+initCloudParticles();
+
 // === Load latest city from storage ===
 const lastCity = localStorage.getItem('lastSearchedCity');
 if (lastCity) {
     loadWeather(lastCity);
 }
+
+// Geo
+geoBtn.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+        alert('Геолокація не підтримується');
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            try {
+                const res = await fetch(
+                    `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=1&appid=0a178768b73fa365b9ac852db3d15da2`
+                );
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    let cityName = data[0].name;
+
+                    if (cityName.includes(' / ')) {
+                        cityName = cityName.split(' / ')[0].trim();
+                    }
+
+                    const country = data[0].country;
+
+                    cityInput.value = `${cityName}, ${country}`;
+                    cityInput.focus();
+                } else {
+                    alert('Не вдалося визначити місто за вашими координатами');
+                }
+            } catch (err) {
+                alert('Не вдалося визначити місто');
+            }
+        },
+        () => {
+            alert('Дозвіл на геолокацію відхилено');
+        }
+    );
+});
+
+geoBtn.addEventListener('click', handleGeolocation);
