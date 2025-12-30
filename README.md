@@ -2,13 +2,13 @@
 
 A clean, mobile-first weather application built with pure JavaScript and the OpenWeatherMap API.
 
-Main screen
+**Main screen**
 ![Main screen](screenshots/laptop-screen1.png)
 
-Search with autocomplete
+**Search with autocomplete**
 ![Search with autocomplete](screenshots/laptop-screen2.png)
 
-Mobile views: search / loading / weather card
+**Mobile views: search / loading / weather card**
 ![Mobile views: search • loading • weather card](screenshots/mobile-screens.PNG)
 
 Live demo: https://kib101d.github.io/weather-app/
