@@ -1,21 +1,30 @@
-# Weather App (Vanilla JS)
+# Weather App — Vanilla JS
 
-Mobile-first weather application built with pure JavaScript and the OpenWeather API.
+A clean, mobile-first weather application built with pure JavaScript and the OpenWeatherMap API.
+
+Live demo: https://kib101d.github.io/weather-app/
 
 ## Features
-- City search
-- Current weather information
-- Error and loading states
-- Celsius / Fahrenheit toggle
-- Mobile-first responsive layout
-- Multi-language support (UA / EN / PL)
 
-## Planned Improvements
-- City select integration within search
-- Improved mobile UX and layout
-- Custom UI animations and visual polish
+- City search with intelligent autocomplete
+- Current weather display
+- Geolocation support (inserts current city into search)
+- °C / °F unit toggle
+- Multi-language support (Ukrainian • English • Polish)
+- Subtle animated cloud background
+- Glassmorphism-style weather card
+- Loading and error states
+- Responsive design (mobile-first)
 
 ## Tech Stack
-- HTML5
-- Vanilla JavaScript (ES6+)
+
+- Vanilla JavaScript (ES6 modules)
 - SCSS
+- OpenWeatherMap API
+
+## Important Note
+
+⚠️ **This demo uses a public API key for demonstration purposes only.**  
+In production applications, use server-side API calls or environment variables to keep your key secure.
+
+Minimalist, fast, and framework-free.
