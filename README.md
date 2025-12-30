@@ -11,10 +11,9 @@ Live demo: https://kib101d.github.io/weather-app/
 - Geolocation support (inserts current city into search)
 - °C / °F unit toggle
 - Multi-language support (Ukrainian • English • Polish)
-- Subtle animated cloud background
-- Glassmorphism-style weather card
 - Loading and error states
 - Responsive design (mobile-first)
+- Subtle animated cloud background
 
 ## Tech Stack
 
